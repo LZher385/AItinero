@@ -22,8 +22,6 @@ export default function FormProvider({ children }: FormProviderProps) {
         }
     };
 
-    console.log(methods)
-
     return (
         <ReactHookFormProvider {...methods}>
             <form onSubmit={methods.handleSubmit(onSubmit)}>
