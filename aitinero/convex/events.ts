@@ -32,20 +32,18 @@ export type UpdateEventArgs = Infer<typeof updateEvent>;
 
 export const create = mutation({
   args: { event: createEvent },
-  handler: async (ctx, { event }) => {
-    const start = event.start_time;
-    const end = event.end_time;
+  handler: async (ctx, { start_time, end_time, title }) => {
     // check that event can be scheduled, return error if not possible
 
     const eventId = await ctx.db.insert(EVENTS_TABLE, {
-      start_time: start,
-      end_time: start,
+      start_time,
+      end_time,
       status: EVENT_STATUS.Confirmed,
       duration: (
-        convertTimestampToMilliseconds(end) -
-        convertTimestampToMilliseconds(start)
+        convertTimestampToMilliseconds(end_time) -
+        convertTimestampToMilliseconds(start_time)
       ).toString(),
-      title: event.title
+      title
     });
     return eventId;
   }
