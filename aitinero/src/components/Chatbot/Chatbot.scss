@@ -1,0 +1,48 @@
+@mixin form-component-style {
+    border-radius: 10px;
+    padding: 0.5em;
+    font-size: 1em;
+}
+
+.chat-container {
+    position: sticky;
+    top: 0px;
+    right: 0px;
+    width: 23vw;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    border: 0.5px solid #d8d8d8;
+    padding: 1vw;
+    border-radius: 10px;
+
+    .form-container {
+        display: flex;
+        justify-content: space-between;
+
+        input {
+            width: 92%;
+            border-style: none;
+            border: 0.5px solid #393e46;
+            @include form-component-style;
+
+            &:focus {
+                outline: none;
+            }
+        }
+
+        button {
+            background: #e5dfdf;
+            color: #393e46;
+            border-style: none;
+            @include form-component-style;
+
+            &:hover {
+                opacity: 0.8;
+                cursor: pointer;
+            }
+        }
+    }
+}
+
