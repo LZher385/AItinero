@@ -15,12 +15,13 @@ export default defineSchema({
         events: v.optional(v.array(v.id("events")))
     }),
     events: defineTable({
+        title: v.string(),
         duration: v.string(), // in miliseconds from Unix Epoch
         start_time: v.string(),
         end_time: v.string(),
-        location: v.string(),
+        location: v.optional(v.string()),
         status: v.string(), // convert to enum
-        description: v.string(),
-        context: v.string()
+        description: v.optional(v.string()),
+        context: v.optional(v.string())
     })
 });
