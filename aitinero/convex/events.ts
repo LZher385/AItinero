@@ -23,9 +23,8 @@ const updateEvent = v.object({
   start_time: v.optional(v.string()),
   end_time: v.optional(v.string()),
   location: v.optional(v.string()),
-  status: v.union(
-    v.literal(EVENT_STATUS.Confirmed),
-    v.literal(EVENT_STATUS.Possible)
+  status: v.optional(
+    v.union(v.literal(EVENT_STATUS.Confirmed), v.literal(EVENT_STATUS.Possible))
   ),
   description: v.optional(v.string()),
   context: v.optional(v.string())
@@ -41,7 +40,7 @@ export const create = mutation({
     const eventId = await ctx.db.insert(EVENTS_TABLE_NAME, {
       start_time,
       end_time,
-      status: EVENT_STATUS.Confirmed,
+      status: EVENT_STATUS.Possible,
       duration: (
         convertTimestampToMilliseconds(end_time) -
         convertTimestampToMilliseconds(start_time)
@@ -64,6 +63,7 @@ export const update = mutation({
   args: { event: updateEvent },
   handler: async (ctx, { event }) => {
     const { id, ...rest } = event;
+    console.log(rest);
     await ctx.db.patch(id, filterUndefinedProperties(rest));
   }
 });
