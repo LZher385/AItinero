@@ -12,12 +12,12 @@
 import type {
   ApiFromModules,
   FilterApi,
-  FunctionReference
-} from 'convex/server';
-import type * as openai from '../openai';
-import type * as trips from '../trips';
-import type * as events from '../events';
-import type * as utils from '../utils';
+  FunctionReference,
+} from "convex/server";
+import type * as events from "../events";
+import type * as openai from "../openai";
+import type * as trips from "../trips";
+import type * as utils from "../utils";
 
 /**
  * A utility for referencing Convex functions in your app's API.
@@ -28,16 +28,16 @@ import type * as utils from '../utils';
  * ```
  */
 declare const fullApi: ApiFromModules<{
+  events: typeof events;
   openai: typeof openai;
   trips: typeof trips;
-  events: typeof events;
   utils: typeof utils;
 }>;
 export declare const api: FilterApi<
   typeof fullApi,
-  FunctionReference<any, 'public'>
+  FunctionReference<any, "public">
 >;
 export declare const internal: FilterApi<
   typeof fullApi,
-  FunctionReference<any, 'internal'>
+  FunctionReference<any, "internal">
 >;

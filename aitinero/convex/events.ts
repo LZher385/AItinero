@@ -17,13 +17,16 @@ const createEvent = v.object({
 export type CreateEventArgs = Infer<typeof createEvent>;
 
 const updateEvent = v.object({
-  id: v.id(EVENTS_TABLE),
+  id: v.id(EVENTS_TABLE_NAME),
   title: v.optional(v.string()),
   duration: v.optional(v.string()),
   start_time: v.optional(v.string()),
   end_time: v.optional(v.string()),
   location: v.optional(v.string()),
-  status: v.optional(v.string()),
+  status: v.union(
+    v.literal(EVENT_STATUS.Confirmed),
+    v.literal(EVENT_STATUS.Possible)
+  ),
   description: v.optional(v.string()),
   context: v.optional(v.string())
 });
@@ -32,10 +35,10 @@ export type UpdateEventArgs = Infer<typeof updateEvent>;
 
 export const create = mutation({
   args: { event: createEvent },
-  handler: async (ctx, { start_time, end_time, title }) => {
+  handler: async (ctx, { event }) => {
     // check that event can be scheduled, return error if not possible
-
-    const eventId = await ctx.db.insert(EVENTS_TABLE, {
+    const { start_time, end_time, title } = event;
+    const eventId = await ctx.db.insert(EVENTS_TABLE_NAME, {
       start_time,
       end_time,
       status: EVENT_STATUS.Confirmed,
@@ -50,7 +53,7 @@ export const create = mutation({
 });
 
 export const get = query({
-  args: { eventId: v.id(EVENTS_TABLE) },
+  args: { eventId: v.id(EVENTS_TABLE_NAME) },
   handler: async (ctx, args) => {
     const event = await ctx.db.get(args.eventId);
     return event;
@@ -59,16 +62,14 @@ export const get = query({
 
 export const update = mutation({
   args: { event: updateEvent },
-  handler: async (ctx, { id, ...rest }) => {
-    await ctx.db.patch(
-      id,
-      filterUndefinedProperties(rest)
-    );
+  handler: async (ctx, { event }) => {
+    const { id, ...rest } = event;
+    await ctx.db.patch(id, filterUndefinedProperties(rest));
   }
 });
 
 export const deleteEvent = mutation({
-  args: { id: v.id(EVENTS_TABLE) },
+  args: { id: v.id(EVENTS_TABLE_NAME) },
   handler: async (ctx, args) => {
     await ctx.db.delete(args.id);
   }
