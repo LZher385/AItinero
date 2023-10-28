@@ -17,7 +17,7 @@ export default function DateForm() {
     return (
         <FormWrapper>
             <div className="flex flex-col place-items-center">
-                <div className="text-slate-700 text-xl font-semibold">
+                <div className="text-xl font-semibold">
                 <p><strong>When</strong> do you want to go?</p>
                 </div>
                 <div className="my-2 flex flex-row px-2">
