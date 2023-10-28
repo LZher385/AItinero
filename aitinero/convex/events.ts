@@ -6,7 +6,7 @@ import {
 } from './utils';
 import { EVENT_STATUS } from './schema';
 
-const EVENTS_TABLE = 'events';
+const EVENTS_TABLE_NAME = 'events';
 
 const createEvent = v.object({
   start_time: v.string(),
