@@ -6,6 +6,11 @@ export enum EVENT_STATUS {
     Possible = "POSS"
 }
 
+export enum TABLE_NAME {
+    TRIPS = 'trips',
+    EVENTS = 'events'
+}
+
 export default defineSchema({
     trips: defineTable({
         start_date: v.string(),
