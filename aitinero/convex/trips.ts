@@ -2,9 +2,6 @@ import { Infer, v } from "convex/values";
 import { TABLE_NAME } from "./schema";
 import { query, mutation } from "./_generated/server";
 
-// Constants
-const TRIPS_TABLE_NAME = "trips"
-
 // Models
 const createTripBody = v.object({
     start_date: v.string(),
@@ -30,13 +27,13 @@ export const create = mutation({
         body: createTripBody
     },
     handler: async (ctx, { body }) => {
-        const tripId = await ctx.db.insert(TRIPS_TABLE_NAME, { ...body });
+        const tripId = await ctx.db.insert(TABLE_NAME.TRIPS, { ...body });
         return tripId
     }
 })
 
 export const read = query({
-    args: { id: v.id(TRIPS_TABLE_NAME) },
+    args: { id: v.id(TABLE_NAME.TRIPS) },
     handler: async (ctx, { id }) => {
         return ctx.db.get(id)
     },
