@@ -1,4 +1,3 @@
-import ConvexClientProvider from "../providers/ConvexClientProvider";
 import FormProvider from "../providers/FormProvider"
 
 export default function FormLayout({
@@ -9,9 +8,7 @@ export default function FormLayout({
 
     return (
         <FormProvider>
-            <ConvexClientProvider>
-                {children}
-            </ConvexClientProvider>
+            {children}
         </FormProvider>
     )
 }
