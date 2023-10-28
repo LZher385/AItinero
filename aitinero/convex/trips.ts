@@ -59,7 +59,7 @@ export const remove = mutation({
 
 export const list = query({
     args: {},
-    handler: async (ctx, { }) => {
-        return await ctx.db.query(TABLE_NAME.TRIPS).order("desc").collect();
+    handler: (ctx, { }) => {
+        return ctx.db.query(TABLE_NAME.TRIPS).order("desc").collect();
     }
 })
