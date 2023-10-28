@@ -63,8 +63,9 @@ export const update = mutation({
   args: { event: updateEvent },
   handler: async (ctx, { event }) => {
     const { id, ...rest } = event;
-    console.log(rest);
-    await ctx.db.patch(id, filterUndefinedProperties(rest));
+    await ctx.db.patch(id, rest);
+    const updatedEvent = await ctx.db.get(id);
+    return updatedEvent;
   }
 });
 
