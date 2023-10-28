@@ -25,8 +25,8 @@ export default function FormProvider({ children }: FormProviderProps) {
             const id = await createTrip({
                 body: {
                     location: data.location,
-                    start_date: new Date(data.startDate).toISOString(),
-                    end_date: new Date(data.endDate).toISOString(),
+                    start_date: data.startDate.toISOString(),
+                    end_date: data.endDate.toISOString(),
                     name: `${data.location}-${data.startDate}`
                 }
             });
