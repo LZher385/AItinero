@@ -3,7 +3,6 @@ import { Infer, v } from "convex/values";
 import OpenAI from "openai";
 
 import { action } from "./_generated/server";
-import { api } from "./_generated/api";
 
 // Initialize the OpenAI client with the given API key
 const apiKey = process.env.OPENAI_API_KEY!;
