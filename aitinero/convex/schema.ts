@@ -20,7 +20,7 @@ export default defineSchema({
         start_time: v.string(),
         end_time: v.string(),
         location: v.optional(v.string()),
-        status: v.string(), // convert to enum
+        status: v.union(v.literal(EVENT_STATUS.Confirmed), v.literal(EVENT_STATUS.Possible)),
         description: v.optional(v.string()),
         context: v.optional(v.string())
     })
