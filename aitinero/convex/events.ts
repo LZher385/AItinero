@@ -59,31 +59,10 @@ export const get = query({
 
 export const update = mutation({
   args: { event: updateEvent },
-  handler: async (ctx, args) => {
-    const {
-      id,
-      title,
-      duration,
-      start_time,
-      end_time,
-      location,
-      status,
-      description,
-      context
-    } = args.event;
-
+  handler: async (ctx, { id, ...rest }) => {
     await ctx.db.patch(
       id,
-      filterUndefinedProperties({
-        title,
-        duration,
-        start_time,
-        end_time,
-        location,
-        status,
-        description,
-        context
-      })
+      filterUndefinedProperties(rest)
     );
   }
 });
