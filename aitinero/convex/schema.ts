@@ -12,7 +12,7 @@ export default defineSchema({
         end_date: v.string(),
         name: v.string(),
         location: v.string(),
-        events: v.array(v.id("events"))
+        events: v.optional(v.array(v.id("events")))
     }),
     events: defineTable({
         duration: v.string(), // in miliseconds from Unix Epoch
