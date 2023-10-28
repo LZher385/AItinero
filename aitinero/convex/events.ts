@@ -2,11 +2,8 @@ import { query, mutation } from './_generated/server';
 import { Infer, v } from 'convex/values';
 import {
   convertTimestampToMilliseconds,
-  filterUndefinedProperties
 } from './utils';
-import { EVENT_STATUS } from './schema';
-
-const EVENTS_TABLE_NAME = 'events';
+import { EVENT_STATUS, TABLE_NAME } from './schema';
 
 const createEvent = v.object({
   start_time: v.string(),
@@ -17,7 +14,7 @@ const createEvent = v.object({
 export type CreateEventArgs = Infer<typeof createEvent>;
 
 const updateEvent = v.object({
-  id: v.id(EVENTS_TABLE_NAME),
+  id: v.id(TABLE_NAME.EVENTS),
   title: v.optional(v.string()),
   duration: v.optional(v.string()),
   start_time: v.optional(v.string()),
@@ -37,7 +34,7 @@ export const create = mutation({
   handler: async (ctx, { event }) => {
     // check that event can be scheduled, return error if not possible
     const { start_time, end_time, title } = event;
-    const eventId = await ctx.db.insert(EVENTS_TABLE_NAME, {
+    const eventId = await ctx.db.insert(TABLE_NAME.EVENTS, {
       start_time,
       end_time,
       status: EVENT_STATUS.Possible,
@@ -52,7 +49,7 @@ export const create = mutation({
 });
 
 export const get = query({
-  args: { eventId: v.id(EVENTS_TABLE_NAME) },
+  args: { eventId: v.id(TABLE_NAME.EVENTS) },
   handler: async (ctx, args) => {
     const event = await ctx.db.get(args.eventId);
     return event;
@@ -70,7 +67,7 @@ export const update = mutation({
 });
 
 export const deleteEvent = mutation({
-  args: { id: v.id(EVENTS_TABLE_NAME) },
+  args: { id: v.id(TABLE_NAME.EVENTS) },
   handler: async (ctx, args) => {
     await ctx.db.delete(args.id);
   }
