@@ -11,7 +11,7 @@ const createTripBody = v.object({
 export type CreateTripBody = Infer<typeof createTripBody>;
 
 // Functions
-export const createTrip = mutation({
+export const create = mutation({
     args: {
         body: createTripBody
     },
@@ -21,7 +21,7 @@ export const createTrip = mutation({
     }
 })
 
-export const readTrip = query({
+export const read = query({
     args: { id: v.id("trips") },
     handler: async (ctx, { id }) => {
         return ctx.db.get(id)
