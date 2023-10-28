@@ -2,11 +2,11 @@ import FormProvider from "../providers/FormProvider"
 
 export default function FormLayout({
     children,
-}: { 
-        children : React.ReactNode; 
+}: {
+    children: React.ReactNode;
 }) {
 
-    return(
+    return (
         <FormProvider>
             {children}
         </FormProvider>
