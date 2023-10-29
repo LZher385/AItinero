@@ -1,10 +1,10 @@
 import '../app/globals.css'
-import { Day } from '../components/day'
-import object from '../components/sample.json'
-import { AddEvent } from '../components/addevent'
-import { MoveEvent } from '../components/moveevent'
+import { Day } from '@/components/day'
+import object from '@/components/sample.json'
+import { AddEvent } from '@/components/addevent'
+import { MoveEvent } from '@/components/moveevent'
 import * as React from "react";
-import Chatbot from "./../components/Chatbot/Chatbot";
+import Chatbot from "@/components/Chatbot/Chatbot";
 import { Button } from "@/components/ui/button"
 
 
