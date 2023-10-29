@@ -2,7 +2,7 @@ import { Infer, v } from 'convex/values';
 import { TABLE_NAME } from './schema';
 import { getDates, getSecondsBetweenTwoTimestamps } from "./utils";
 import { query, mutation } from './_generated/server';
-import { Trip, TripDoc } from '../src/app/types/trip';
+import { TripDoc } from '../src/app/types/trip';
 import { DateTime } from 'luxon';
 // Models
 const createTripBody = v.object({
