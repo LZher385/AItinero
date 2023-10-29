@@ -76,7 +76,10 @@ export const detail = query({
 
         // Assuming getAll fetches events based on event_ids. 
         // It's beneficial if the underlying method has a way of fetching these in a single DB call.
-        let events = await Promise.all(trip.events.map(ctx.db.get));
+        const events = await Promise.all(trip.events.map(ctx.db.get));
+
+        // Filters out null events
+        events.filter(event => !!event);
 
         // If events are always in chronological order in the DB, this sort might not be necessary.
         events.sort((event1, event2) => getSecondsBetweenTimestamps(event2!.start_time, event1!.start_time));
@@ -84,7 +87,7 @@ export const detail = query({
         const days = getDates(trip.start_date, trip.end_date);
         const tripDetails = days.map(day => ({
             date: day.day,
-            events: events.filter(event => event!.start_time > day.start && event!.end_time < day.end)
+            events: events.filter(event => event!.start_time > day.start && event!.start_time < day.end)
         }));
 
         return {
