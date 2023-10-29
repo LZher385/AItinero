@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useRef } from "react";
-import "./Chats.scss";
+import React, { useState, useEffect, useRef } from 'react';
+import './Chats.scss';
 
 interface Props {
   userResponse: string;
@@ -20,7 +20,7 @@ interface MessagesInfo {
   sender: string;
 }
 
-const Chats: React.FC<Props> = props => {
+const Chats: React.FC<Props> = (props) => {
   const [messages, setMessages] = useState<MessagesInfo[]>([]);
   const dummyRef = useRef<HTMLDivElement>(null);
   const bodyRef = useRef<HTMLDivElement>(null);
@@ -30,15 +30,15 @@ const Chats: React.FC<Props> = props => {
     if (messages.length === 0) {
       setMessages([
         {
-          purpose: "introduction",
+          purpose: 'introduction',
           message:
             "Hi there. If you're here, that means you're looking for a job. Tell me, what's your name?",
-          sender: "bot"
+          sender: 'bot'
         }
       ]);
     } else {
       let tempArray = [...messages];
-      tempArray.push({ message: props.sendUserResponse, sender: "user" });
+      tempArray.push({ message: props.sendUserResponse, sender: 'user' });
       setMessages(tempArray);
 
       setTimeout(() => {
@@ -54,14 +54,14 @@ const Chats: React.FC<Props> = props => {
     if (dummyRef && dummyRef.current && bodyRef && bodyRef.current) {
       bodyRef.current.scrollTo({
         top: dummyRef.current.offsetTop,
-        behavior: "smooth"
+        behavior: 'smooth'
       });
     }
   }, [messages]);
 
   return (
     <div className="message-container" ref={bodyRef}>
-      {messages.map(chat => (
+      {messages.map((chat) => (
         <div key={chat.message}>
           <div className={`message ${chat.sender}`}>
             <p>{chat.message}</p>
@@ -71,9 +71,9 @@ const Chats: React.FC<Props> = props => {
               <div>
                 <i className="far fa-hand-pointer"></i>
               </div>
-              {chat.options.map(option => (
+              {chat.options.map((option) => (
                 <p
-                  onClick={e => props.optionClick(e)}
+                  onClick={(e) => props.optionClick(e)}
                   data-id={option}
                   key={option}
                 >

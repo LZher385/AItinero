@@ -1,6 +1,6 @@
-import React, { useState } from "react";
-import Chats from "../Chats/Chats";
-import "./Chatbot.scss";
+import React, { useState } from 'react';
+import Chats from '../Chats/Chats';
+import './Chatbot.scss';
 
 interface ResponseBotObject {
   purpose: string;
@@ -10,22 +10,22 @@ interface ResponseBotObject {
 }
 
 const Chatbot: React.FC = () => {
-  const [userResponse, setUserResponse] = useState<string>("");
+  const [userResponse, setUserResponse] = useState<string>('');
   const [step, setStep] = useState<number>(0);
   const [botResponse, setBotResponse] = useState<ResponseBotObject>({
-    purpose: "",
-    message: "",
-    sender: "bot"
+    purpose: '',
+    message: '',
+    sender: 'bot'
   });
-  const [sendUserResponse, setSendUserResponse] = useState<string>("");
+  const [sendUserResponse, setSendUserResponse] = useState<string>('');
 
   // setting next step when there's response and option click
   const setNextStep = (response: string) => {
-    setStep(prevState => prevState + 1);
+    setStep((prevState) => prevState + 1);
     setSendUserResponse(response);
     //let res = analyzeNextSteps(step, response);
     //setBotResponse({ ...res, sender: "bot" });
-    setUserResponse("");
+    setUserResponse('');
   };
 
   const optionClick = (e: React.MouseEvent<HTMLElement>) => {
@@ -53,9 +53,9 @@ const Chatbot: React.FC = () => {
         sendUserResponse={sendUserResponse}
         optionClick={optionClick}
       />
-      <form onSubmit={e => handleSubmit(e)} className="form-container">
+      <form onSubmit={(e) => handleSubmit(e)} className="form-container">
         <input
-          onChange={e => handleInputChange(e)}
+          onChange={(e) => handleInputChange(e)}
           value={userResponse}
         ></input>
         <button>
