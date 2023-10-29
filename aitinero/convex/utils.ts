@@ -1,5 +1,4 @@
-import { GenericId } from 'convex/values';
-import { DateTime, DiffOptions, DurationUnits } from 'luxon';
+import { DateTime, } from 'luxon';
 
 export const convertTimestampToMilliseconds = (timestamp: string) => {
   const date = DateTime.fromISO(timestamp);
@@ -22,7 +21,7 @@ export const getDates = (startTime: string, endTime: string) => {
   return dateArray;
 }
 
-export const getSecondsBetweenTwoTimestamps = (startTime: string, endTime: string) => {
+export const getSecondsBetweenTimestamps = (startTime: string, endTime: string) => {
   const end = DateTime.fromISO(endTime);
   const start = DateTime.fromISO(startTime);
   return end.diff(start, 'seconds').toObject()['seconds']!;
