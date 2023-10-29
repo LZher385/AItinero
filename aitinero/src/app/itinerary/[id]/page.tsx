@@ -1,31 +1,25 @@
+
+
 import { Home } from '@/components/itinerarylayout';
+import { useQuery, useMutation } from 'convex/react'
+import {api} from '../../../../convex/_generated/api'
+import { TABLE_NAME } from '../../../../convex/schema';
+import { Id } from '../../../../convex/_generated/dataModel';
 
-type Trip = {
-    trip: {
-        name: string,
-        days: {
-            date: string,
-            events: {
-                title: string,
-                start_time:string,
-                end_time:string,
-                description:string
-            }[]
-        }[]
-    }[]; 
-}
+function getTripData(slug: string) {
+    const id = slug as Id<TABLE_NAME.TRIPS>
+    const tripData = useQuery(api.trips.detail, {id});
 
-async function getTripData(slug: string) {
-    const res = await fetch(`https:/`)
-    const tripData = await res.json()
+    console.log(tripData)
+
     return tripData
 }
 
-export default async function Page({ params }: { params: { slug: string } }) {
-    const tripData = await getTripData(params.slug)
+export default function Page({ params }: { params: { slug: string } }) {
+    const tripData = getTripData(params.slug)!
     
     return (
-        <Home dayarray = {tripData.trip[0].days}/>
+        <Home dayarray={tripData.days}/>
     );
 
 }

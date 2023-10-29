@@ -10,17 +10,37 @@ import Chatbot from "@/components/Chatbot/Chatbot";
 import { Button } from "@/components/ui/button"
 import { useQuery, useMutation } from 'convex/react'
 import { api } from '../../convex/_generated/api'
+import { EVENT_STATUS } from '../../convex/schema';
+import { Id } from '../../convex/_generated/dataModel';
+
+// interface Props{
+//     dayarray: {
+//         date: string,
+//         events: {
+//             title: string,
+//             start_time:string,
+//             end_time:string,
+//             description:string
+//         }[]
+//     }[]
+// }
 
 interface Props{
     dayarray: {
-        date: string,
-        events: {
-            title: string,
-            start_time:string,
-            end_time:string,
-            description:string
-        }[]
-    }[]
+        date: string;
+        events: ({
+            _id: Id<"events">;
+            _creationTime: number;
+            location?: string | undefined;
+            description?: string | undefined;
+            context?: string | undefined;
+            title: string;
+            duration: string;
+            start_time: string;
+            end_time: string;
+            status: EVENT_STATUS;
+        } | null)[];
+    }[] | undefined
 }
 
 export const Home: React.FC<Props> = ({dayarray}) => {
