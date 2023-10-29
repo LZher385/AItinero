@@ -1,5 +1,6 @@
 import { Infer, v } from "convex/values";
 import { TABLE_NAME } from "./schema";
+import { getDates, getSecondsBetweenTwoTimestamps } from "./utils";
 import { query, mutation } from "./_generated/server";
 
 // Models
@@ -63,3 +64,32 @@ export const list = query({
         return ctx.db.query(TABLE_NAME.TRIPS).order("desc").collect();
     }
 })
+
+export const detail = query({
+    args: { id: v.id(TABLE_NAME.TRIPS) },
+    handler: async (ctx, { }) => {
+        const trip = await ctx.db.query(TABLE_NAME.TRIPS).unique();
+
+        if (!trip || !trip.events || trip.events.length === 0) {
+            return {};
+        }
+
+        // Assuming getAll fetches events based on event_ids. 
+        // It's beneficial if the underlying method has a way of fetching these in a single DB call.
+        let events = await Promise.all(trip.events.map(ctx.db.get));
+
+        // If events are always in chronological order in the DB, this sort might not be necessary.
+        events.sort((event1, event2) => getSecondsBetweenTwoTimestamps(event2!.start_time, event1!.start_time));
+
+        const days = getDates(trip.start_date, trip.end_date);
+        const tripDetails = days.map(day => ({
+            date: day.day,
+            events: events.filter(event => event!.start_time > day.start && event!.end_time < day.end)
+        }));
+
+        return {
+            name: trip.name,
+            days: tripDetails,
+        };
+    }
+});
