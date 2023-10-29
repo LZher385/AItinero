@@ -1,5 +1,5 @@
 "use node";
-import { Infer, v } from "convex/values";
+import { v } from "convex/values";
 import { ChatOpenAI } from "langchain/chat_models/openai"
 import { PromptTemplate } from "langchain/prompts";
 import { JsonOutputFunctionsParser } from "langchain/output_parsers";
