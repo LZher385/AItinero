@@ -1,4 +1,4 @@
-import { Id } from "../../../convex/_generated/dataModel" 
+import { Doc, Id } from "../../../convex/_generated/dataModel" 
 export interface Trip {
     _id: Id<"trips">;
     _creationTime: number;
@@ -8,3 +8,5 @@ export interface Trip {
     name: string;
     location: string;
 }
+
+export type TripDoc = Doc<"trips">;

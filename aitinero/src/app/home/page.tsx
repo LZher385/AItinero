@@ -2,7 +2,7 @@
 
 import CardsWrapper from '@/components/CardsWrapper';
 import { useRouter } from 'next/navigation';
-import { Trip } from '@/app/types/trip';
+import { Trip, TripDoc } from '@/app/types/trip';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Cross2Icon } from '@radix-ui/react-icons'
@@ -16,7 +16,7 @@ import { TABLE_NAME } from '../../../convex/schema';
 import { DateTime } from 'luxon';
 
 interface MakeTripCardProps {
-  trip: Trip ;
+  trip: TripDoc ;
   removeTrip: ReactMutation<FunctionReference<"mutation", "public", {
     id: Id<"trips">;
   }>>;
@@ -29,16 +29,14 @@ const MakeTripCard = ({trip, removeTrip}: MakeTripCardProps) => {
     router.replace(`/itinerary/${id}`);
   };
 
-  let formattedStartDate = DateTime.fromISO(trip.start_date).toLocaleString(DateTime.DATE_MED);
-  let formattedEndDate = DateTime.fromISO(trip.end_date).toLocaleString(DateTime.DATE_MED);
-
+  
   return (
     <Card className='h-full w-96'>
       <CardHeader>
         <CardTitle>{trip.location}</CardTitle>
       </CardHeader>
       <CardContent>
-        {formattedStartDate} - {formattedEndDate}
+        {trip.start_date} - {trip.end_date}
       </CardContent>
       <div className='flex flex-row place-content-center justify-between'>
         <div className='m-5'>
