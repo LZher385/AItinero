@@ -26,7 +26,7 @@ export default function LocationForm() {
                 </div>
                 <div className="my-2">
                     <Input type="text" className="rounded-md p-2 w-96" {...register('location',
-                        {validate: (value) => value.length > 0 && !!value.match(/^[a-zA-Z ]*$/)}
+                        {validate: (value) => value.length > 0 && /^[a-zA-Z ]*$/.test(value)}
                     )}/>
                 </div>
                 <div className="flex flex-row my-5">
