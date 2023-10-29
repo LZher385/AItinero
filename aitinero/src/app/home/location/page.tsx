@@ -12,7 +12,8 @@ export default function LocationForm() {
     const {register, trigger, formState} = useAppFormContext();
     const {isValid} = formState;
     const validateStep = async () => {
-        await trigger();
+        let isValid = await trigger("location");
+        console.log(isValid)
         if (isValid) {
             router.push('/home/duration');
         }
@@ -26,7 +27,7 @@ export default function LocationForm() {
                 </div>
                 <div className="my-2">
                     <Input type="text" className="rounded-md p-2 w-96" {...register('location',
-                        {validate: (value) => value !== ''}
+                        {validate: (value) => value.length > 0 && !!value.match(/^[a-zA-Z ]*$/)}
                     )}/>
                 </div>
                 <div className="place-self-end">

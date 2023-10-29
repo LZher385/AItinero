@@ -19,8 +19,7 @@ export default function FormProvider({ children }: FormProviderProps) {
     const createTrip = useMutation(api.trips.create);
 
     const onSubmit: SubmitHandler<FormValues> = async (data) => {
-        const isValid = data.location && data.startDate && data.endDate;
-
+        const isValid = await methods.trigger();
         if (isValid) {
             const id = await createTrip({
                 body: {

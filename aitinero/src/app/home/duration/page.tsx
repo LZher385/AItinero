@@ -24,6 +24,7 @@ export default function DateForm() {
                         <Controller
                             control={control} 
                             name = "startDate"
+                            rules = {{required: true}}
                             render = {( {field: {onChange, value, ref}}) => (
                         <DatePicker
                         onChange={onChange}
@@ -36,6 +37,7 @@ export default function DateForm() {
                         <Controller
                             control={control}
                             name = "endDate"
+                            rules = {{required: true}}
                             render = {({field: {onChange, onBlur, value, ref,}}) => (
                             <DatePicker
                             onChange={onChange}
