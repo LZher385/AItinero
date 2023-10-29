@@ -9,7 +9,7 @@ import * as React from "react";
 import Chatbot from "@/components/Chatbot/Chatbot";
 import { Button } from "@/components/ui/button"
 import { useQuery, useMutation } from 'convex/react'
-import {api} from '../../../convex/_generated/api'
+import {api} from '../../convex/_generated/api'
 
 interface Props{
     dayarray: {
