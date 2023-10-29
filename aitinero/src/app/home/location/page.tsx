@@ -7,15 +7,15 @@ import useAppFormContext from '@/lib/hooks/useAppFormContext';
 import { useRouter } from 'next/navigation';
 
 export default function LocationForm() {
-  const router = useRouter();
-  const { register, trigger, formState } = useAppFormContext();
-  const { isValid } = formState;
-  const validateStep = async () => {
-    await trigger();
-    if (isValid) {
-      router.push('/home/duration');
+    const router = useRouter();
+    const {register, trigger, formState} = useAppFormContext();
+    const {isValid} = formState;
+    const validateStep = async () => {
+        let isValid = await trigger("location");
+        if (isValid) {
+            router.push('/home/duration');
+        }
     }
-  };
 
     return (
         <FormWrapper>
@@ -23,8 +23,10 @@ export default function LocationForm() {
                 <div className="text-slate-700 text-xl font-semibold">
                 <p><strong>Where</strong> do you want to go?</p>
                 </div>
-                <div className="text-white my-2">
-                    <Input type="text" className="rounded-md p-2 w-96 bg-slate-800" {...register('location')}/>
+                <div className="my-2">
+                    <Input type="text" className="rounded-md p-2 w-96" {...register('location',
+                        {validate: (value) => value.length > 0 && /^[a-zA-Z ]*$/.test(value)}
+                    )}/>
                 </div>
                 <div className="flex flex-row my-5">
                     <div mx-10 className="mx-20">
@@ -33,7 +35,7 @@ export default function LocationForm() {
                         </Button>
                     </div>
                     <div className="mx-20">
-                        <Button type="button" onClick={() => router.push('/home/duration')}>
+                        <Button type="button" onClick={validateStep}>
                             Next
                         </Button>
                     </div>
