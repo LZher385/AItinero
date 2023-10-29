@@ -30,10 +30,17 @@ export default function LocationForm() {
                         {validate: (value) => value.length > 0 && !!value.match(/^[a-zA-Z ]*$/)}
                     )}/>
                 </div>
-                <div className="place-self-end">
-                    <Button type="button" onClick={validateStep}>
-                        Next
-                    </Button>
+                <div className="flex flex-row my-5">
+                    <div mx-10 className="mx-20">
+                        <Button type="button" onClick={() => router.push('/home/')}>
+                            Back
+                        </Button>
+                    </div>
+                    <div className="mx-20">
+                        <Button type="button" onClick={() => router.push('/home/duration')}>
+                            Next
+                        </Button>
+                    </div>
                 </div>
             </div>
         </FormWrapper>
