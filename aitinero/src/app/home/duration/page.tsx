@@ -8,7 +8,6 @@ import  {useRouter} from "next/navigation";
 import { DatePicker } from "@/components/ui/datePicker";
 import { Controller } from "react-hook-form";
 
-
 export default function DateForm() {
     const router = useRouter();
     const {control, trigger, formState} = useAppFormContext();
@@ -28,6 +27,7 @@ export default function DateForm() {
                             render = {( {field: {onChange, value, ref}}) => (
                         <DatePicker
                         onChange={onChange}
+                        placeholder="Start Date"
                         selected = {value}/>
                             )}
                         />
@@ -36,18 +36,27 @@ export default function DateForm() {
                         <Controller
                             control={control}
                             name = "endDate"
-                            render = {({field: {onChange, onBlur, value, ref}}) => (
+                            render = {({field: {onChange, onBlur, value, ref,}}) => (
                             <DatePicker
                             onChange={onChange}
+                            placeholder="End Date"
                             selected = {value}/>)}
                         />
                     </div>
                 </div>
-                <div className="place-self-end">
-                    <Button type="submit">
-                        Next
-                    </Button>
+                <div className="flex flex-row my-5">
+                    <div mx-10 className="mx-20">
+                        <Button type="button" onClick={() => router.push('/home/location')}>
+                            Back
+                        </Button>
+                    </div>
+                    <div className="mx-20">
+                        <Button type="submit">
+                            Next
+                        </Button>
+                    </div>
                 </div>
+
             </div>
         </FormWrapper>
     )
