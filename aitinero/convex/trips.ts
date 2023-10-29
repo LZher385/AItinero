@@ -1,5 +1,5 @@
 import { Infer, v } from 'convex/values';
-import { TABLE_NAME } from './schema';
+import { EVENT_STATUS, TABLE_NAME } from './schema';
 import { getDates, getSecondsBetweenTimestamps } from "./utils";
 import { query, mutation } from './_generated/server';
 import { TripDoc } from '../src/app/types/trip';
@@ -115,3 +115,22 @@ export const detail = query({
     };
   }
 });
+
+export const possible_events = query({
+  args: { id: v.id(TABLE_NAME.TRIPS) },
+  handler: async (ctx, { id }) => {
+    const trip = await ctx.db.get(id);
+
+    if (!trip || !trip.events) {
+      return [];
+    }
+
+    const events = await Promise.all(trip.events.map(ctx.db.get));
+
+    const possibleEvents = events
+      // Filters out null events
+      .filter(event => event?.status == EVENT_STATUS.Possible)
+
+    return possibleEvents;
+  }
+})
