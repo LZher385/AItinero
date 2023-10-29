@@ -27,7 +27,7 @@ export default function LocationForm() {
                 <div className="my-2">
                     <Input type="text" className="rounded-md p-2 w-96" {...register('location')}/>
                 </div>
-                <div className="place-self-end">
+                <div className="place-self-end my-5">
                     <Button type="button" onClick={validateStep}>
                         Next
                     </Button>
