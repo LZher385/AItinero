@@ -5,7 +5,7 @@ import OpenAI from 'openai';
 import { action } from './_generated/server';
 
 // Initialize the OpenAI client with the given API key
-const apiKey = process.env.OPENAI_API_KEY!;
+const apiKey = "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";
 const openai = new OpenAI({ apiKey });
 
 // Models
@@ -16,8 +16,8 @@ const aiMessage = v.object({
 export type AiMessage = Infer<typeof aiMessage>;
 
 export const chat = action({
-  args: { messageHistory: v.array(aiMessage), messageBody: v.string() },
-  handler: async (_, { messageHistory, messageBody }) => {
+  args: { messageHistory: v.array(aiMessage), messageBody: v.string(), messageContext: v.string()},
+  handler: async (_, { messageHistory, messageBody, messageContext}) => {
     const newMessageHistory = [
       ...messageHistory,
       {
@@ -35,7 +35,7 @@ export const chat = action({
           // Provide a 'system' message to give GPT context about how to respond
           role: 'system',
           content:
-            'You are a helpful bot in a 1-on-1 chat responding to questions about travel with as much accurate information as possible.'
+          'You are a helpful bot in a 1-on-1 chat responding to questions about travel, specifically about their trip given in the provided json after this prompt. Give short and sweet responses. You can also try and parse this json file as a basis for answering any questions the user has in particular about their trip, such as about dates, timings, and events: ' + messageContext 
         },
         ...newMessageHistory
       ]

@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import Chats from "../Chats/Chats";
 import "./Chatbot.scss";
+import { EVENT_STATUS, TABLE_NAME } from '../../../convex/schema';
+import { Id } from '../../../convex/_generated/dataModel';
 
 interface ResponseBotObject {
   purpose: string;
@@ -9,7 +11,25 @@ interface ResponseBotObject {
   sender: string;
 }
 
-const Chatbot: React.FC = () => {
+interface Props {
+  dayarray: {
+            date: string;
+            events: ({
+                _id: Id<"events">;
+                _creationTime: number;
+                location?: string | undefined;
+                description?: string | undefined;
+                context?: string | undefined;
+                title: string;
+                duration: string;
+                start_time: string;
+                end_time: string;
+                status: EVENT_STATUS;
+            } | null)[];
+        }[] | undefined
+}
+
+const Chatbot: React.FC<Props> = ({dayarray}) => {
   const [userResponse, setUserResponse] = useState<string>("");
   const [step, setStep] = useState<number>(0);
   const [botResponse, setBotResponse] = useState<ResponseBotObject>({
@@ -52,6 +72,7 @@ const Chatbot: React.FC = () => {
         botResponse={botResponse}
         sendUserResponse={sendUserResponse}
         optionClick={optionClick}
+        dayarray = {dayarray}
       />
       <form onSubmit={e => handleSubmit(e)} className="form-container">
         <input

@@ -34,15 +34,11 @@ interface Props{
 
 export const Home: React.FC<Props> = ({tripId, dayarray}) => {
 
-    function generateFunction() {
-        
-    }
-
     return (
         <main className="bg-white flex flex-row">
             <div className="w-[75vw] flex flex-col">
                 <div className="h-20 flex flex-row items-end pl-[2vw]">
-                    <Button variant="outline" onClick={generateFunction}>Generate!</Button>
+                    <Button variant="outline">Generate!</Button>
                     <AddEvent tripId = {tripId}/>
                     <MoveEvent dayarray = {dayarray}/>
                 </div>
@@ -51,7 +47,7 @@ export const Home: React.FC<Props> = ({tripId, dayarray}) => {
                 </div>
             </div>
             <div className="w-[25vw]">
-                <Chatbot />
+                <Chatbot dayarray = {dayarray}/>
             </div>
         </main>
     )
