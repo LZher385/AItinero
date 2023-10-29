@@ -32,11 +32,10 @@ export function AddEvent() {
   const [eventDescription, setEventDescription] = useState<string>('')
   const changeEventDescription = (eventdescription: SetStateAction<string>) => setEventDescription(eventdescription)
 
-  let realStartTime = eventDate + "T" + startTime + ":00.000Z"
-  let realEndTime = eventDate + "T" + endTime + ":00.000Z"
-
   const create = useMutation(api.events.create);
   const handleClick = () => {
+    let realStartTime = eventDate + "T" + startTime + ":00.000Z"
+    let realEndTime = eventDate + "T" + endTime + ":00.000Z"
     create({ event: {start_time: realStartTime, end_time: realEndTime, title: eventName, description: eventDescription}});
   };
 

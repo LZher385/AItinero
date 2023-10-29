@@ -1,6 +1,8 @@
 'use client';
 
+import * as React from "react"
 import { Button } from "@/components/ui/button"
+import { cn } from "@/lib/utils"
 import {
   Dialog,
   DialogContent,
@@ -10,11 +12,26 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog"
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+} from "@/components/ui/command"
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover"
+import { Check, ChevronsUpDown } from "lucide-react"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { SetStateAction, useEffect, useState } from "react"
-import { EVENT_STATUS } from "../../convex/schema";
+import { EVENT_STATUS, TABLE_NAME } from "../../convex/schema";
 import { Id } from '../../convex/_generated/dataModel';
+import { useQuery, useMutation } from "convex/react"
+import { api } from "../../convex/_generated/api";
 
 interface Props {
     dayarray: {
@@ -35,21 +52,43 @@ interface Props {
 }
 
 export const MoveEvent: React.FC<Props> = ({dayarray}) => {
-  const [currentEventDate, setCurrentEventDate] = useState<string>('')
-  const changeCurrentEventDate = (currentdate: SetStateAction<string>) => setCurrentEventDate(currentdate)
 
-  const [currentEventTime, setCurrentEventTime] = useState<string>('')
-  const changeCurrentEventTime = (currenttime: SetStateAction<string>) => setCurrentEventTime(currenttime)
+  const [open, setOpen] = React.useState(false)
+  const [value, setValue] = React.useState("")
 
   const [newEventDate, setNewEventDate] = useState<string>('')
   const changeNewEventDate = (newdate: SetStateAction<string>) => setNewEventDate(newdate)
 
-  const [newEventTime, setNewEventTime] = useState<string>('')
-  const changeNewEventTime = (currenttime: SetStateAction<string>) => setNewEventTime(currenttime)
+  const [newEventStartTime, setNewEventStartTime] = useState<string>('')
+  const changeNewEventStartTime = (newstarttime: SetStateAction<string>) => setNewEventStartTime(newstarttime)
 
-  function moveeventFunction() {
-    console.log((currentEventDate + "T" + currentEventTime + ":00.000Z"), (newEventDate + "T" + newEventTime + ":00.000Z"))
+  const [newEventEndTime, setNewEventEndTime] = useState<string>('')
+  const changeNewEventEndTime = (newendtime: SetStateAction<string>) => setNewEventEndTime(newendtime)
+
+  var eventarray = []
+
+  if (dayarray == undefined){
+    dayarray = []
+  } 
+
+  for (let i = 0; i < dayarray.length; i++) {
+    const eventlist = dayarray[i].events 
+    if (eventlist != null) {
+      for (let j = 0; j < eventlist.length; j++) {
+        eventarray.push({
+          value: eventlist[j]!._id,
+          label: eventlist[j]!.title
+        })
+      }
+    }
   }
+
+  const update = useMutation(api.events.update);
+  const handleClick = () => {
+    let newStartTime = newEventDate + "T" + newEventStartTime + ":00.000Z"
+    let newEndTime = newEventDate + "T" + newEventEndTime + ":00.000Z"
+    update({ event: {id: value as Id<TABLE_NAME.EVENTS>, start_time: newStartTime, end_time: newEndTime}});
+  };
 
   return (
     <Dialog>
@@ -68,25 +107,47 @@ export const MoveEvent: React.FC<Props> = ({dayarray}) => {
             <Label htmlFor="currenteventdate" className="text-right">
               Current Date
             </Label>
-            <Input
-              type="date"
-              id="currenteventdate"
-              className="col-span-3"
-              onChange={e => changeCurrentEventDate(e.target.value)}
-              value={currentEventDate}
-            />
-          </div>
-          <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="currentstarttime" className="text-right">
-              Current Start Time
-            </Label>
-            <Input
-              type="time"
-              id="currentstarttime"
-              className="col-span-3"
-              onChange={e => changeCurrentEventTime(e.target.value)}
-              value={currentEventTime}
-            />
+            <Popover open={open} onOpenChange={setOpen}>
+              <PopoverTrigger asChild>
+                <Button
+                  variant="outline"
+                  role="combobox"
+                  aria-expanded={open}
+                  className="w-[200px] justify-between"
+                >
+                  {value
+                    ? eventarray.find((eventarray) => eventarray.value === value)?.label
+                    : "Select framework..."}
+                  <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent className="w-[200px] p-0">
+                <Command>
+                  <CommandInput placeholder="Search framework..." />
+                  <CommandEmpty>No framework found.</CommandEmpty>
+                  <CommandGroup>
+                    {eventarray.map((eventarray) => (
+                      <CommandItem
+                        key={eventarray.value}
+                        value={eventarray.value}
+                        onSelect={(currentValue) => {
+                          setValue(currentValue === value ? "" : currentValue)
+                          setOpen(false)
+                        }}
+                      >
+                        <Check
+                          className={cn(
+                            "mr-2 h-4 w-4",
+                            value === eventarray.value ? "opacity-100" : "opacity-0"
+                          )}
+                        />
+                        {eventarray.label}
+                      </CommandItem>
+                    ))}
+                  </CommandGroup>
+                </Command>
+              </PopoverContent>
+            </Popover>
           </div>
           <div className="grid grid-cols-4 items-center gap-4">
             <Label htmlFor="neweventdate" className="text-right">
@@ -108,13 +169,25 @@ export const MoveEvent: React.FC<Props> = ({dayarray}) => {
               type="time"
               id="newstarttime"
               className="col-span-3"
-              onChange={e => changeNewEventTime(e.target.value)}
-              value={newEventTime}
+              onChange={e => changeNewEventStartTime(e.target.value)}
+              value={newEventStartTime}
+            />
+          </div>
+          <div className="grid grid-cols-4 items-center gap-4">
+            <Label htmlFor="newstarttime" className="text-right">
+              New Start Time
+            </Label>
+            <Input
+              type="time"
+              id="newstarttime"
+              className="col-span-3"
+              onChange={e => changeNewEventEndTime(e.target.value)}
+              value={newEventEndTime}
             />
           </div>
         </div>
         <DialogFooter>
-          <Button type="submit" onClick={moveeventFunction}>Submit</Button>
+          <Button type="submit" onClick={handleClick}>Submit</Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>

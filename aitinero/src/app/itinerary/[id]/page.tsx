@@ -10,6 +10,8 @@ function getTripData(slug: string) {
     const id = slug as Id<TABLE_NAME.TRIPS>
     const tripData = useQuery(api.trips.detail, {id});
 
+    console.log(tripData)
+
     return tripData
 }
 
