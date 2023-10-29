@@ -13,7 +13,6 @@ export default function LocationForm() {
     const {isValid} = formState;
     const validateStep = async () => {
         let isValid = await trigger("location");
-        console.log(isValid)
         if (isValid) {
             router.push('/home/duration');
         }
