@@ -11,7 +11,19 @@ import { Button } from "@/components/ui/button"
 import { useQuery, useMutation } from 'convex/react'
 import {api} from '../../../convex/_generated/api'
 
-export default function Home() {
+interface Props{
+    dayarray: {
+        date: string,
+        events: {
+            title: string,
+            start_time:string,
+            end_time:string,
+            description:string
+        }[]
+    }[]
+}
+
+export const Home: React.FC<Props> = ({dayarray}) => {
 
     function generateFunction() {
         
@@ -26,7 +38,7 @@ export default function Home() {
                     <MoveEvent />
                 </div>
                 <div className="bg-white flex flex-row grow items-start py-10 overflow-x-auto">
-                    <Day dayarray = {object.trips[0].days}/>
+                    <Day dayarray = {dayarray}/>
                 </div>
             </div>
             <div className="w-[25vw]">
