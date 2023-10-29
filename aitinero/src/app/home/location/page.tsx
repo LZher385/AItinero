@@ -21,11 +21,11 @@ export default function LocationForm() {
     return (
         <FormWrapper>
             <div className="flex flex-col place-items-center">
-                <div className="text-slate-700 text-xl font-semibold">
+                <div className="text-xl font-semibold">
                 <p><strong>Where</strong> do you want to go?</p>
                 </div>
-                <div className="text-white my-2">
-                    <Input type="text" className="rounded-md p-2 w-96 bg-slate-800" {...register('location')}/>
+                <div className="my-2">
+                    <Input type="text" className="rounded-md p-2 w-96" {...register('location')}/>
                 </div>
                 <div className="place-self-end">
                     <Button type="button" onClick={validateStep}>
