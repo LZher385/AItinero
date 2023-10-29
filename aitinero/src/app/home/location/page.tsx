@@ -25,7 +25,9 @@ export default function LocationForm() {
                 <p><strong>Where</strong> do you want to go?</p>
                 </div>
                 <div className="my-2">
-                    <Input type="text" className="rounded-md p-2 w-96" {...register('location')}/>
+                    <Input type="text" className="rounded-md p-2 w-96" {...register('location',
+                        {validate: (value) => value !== ''}
+                    )}/>
                 </div>
                 <div className="place-self-end">
                     <Button type="button" onClick={validateStep}>

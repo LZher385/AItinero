@@ -19,7 +19,7 @@ export default function FormProvider({ children }: FormProviderProps) {
     const createTrip = useMutation(api.trips.create);
 
     const onSubmit: SubmitHandler<FormValues> = async (data) => {
-        const isValid = true;
+        const isValid = data.location && data.startDate && data.endDate;
 
         if (isValid) {
             const id = await createTrip({
@@ -30,8 +30,6 @@ export default function FormProvider({ children }: FormProviderProps) {
                     name: `${data.location}-${data.startDate}`
                 }
             });
-            console.log(id)
-            console.log(data)
         } else {
             route.replace('/home')
         }
