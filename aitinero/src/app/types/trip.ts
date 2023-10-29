@@ -1,7 +1,10 @@
+import { Id } from "../../../convex/_generated/dataModel" 
 export interface Trip {
-    _id: String,
-    end_date: String,
-    location: String,
-    name: String,
-    start_date: String,
+    _id: Id<"trips">;
+    _creationTime: number;
+    events?: Id<"events">[] | undefined;
+    start_date: string;
+    end_date: string;
+    name: string;
+    location: string;
 }
