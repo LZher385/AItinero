@@ -1,8 +1,13 @@
 "use node";
+// Convex Imports
 import { v } from "convex/values";
+
+// Langchain Imports
 import { ChatOpenAI } from "langchain/chat_models/openai"
 import { PromptTemplate } from "langchain/prompts";
 import { JsonOutputFunctionsParser } from "langchain/output_parsers";
+
+// Zod Validation Imports
 import { z } from 'zod';
 import { zodToJsonSchema } from "zod-to-json-schema";
 
