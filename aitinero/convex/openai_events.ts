@@ -59,8 +59,6 @@ const chain = prompt
 export const chat = action({
     args: { messageBody: v.string() },
     handler: async (_, { messageBody }) => {
-
-        // TODO
         const result = await chain.invoke({
             input: messageBody,
         });
