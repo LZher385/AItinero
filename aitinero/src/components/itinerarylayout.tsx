@@ -55,7 +55,7 @@ export const Home: React.FC<Props> = ({dayarray}) => {
                 <div className="h-20 flex flex-row items-end pl-[2vw]">
                     <Button variant="outline" onClick={generateFunction}>Generate!</Button>
                     <AddEvent />
-                    <MoveEvent />
+                    <MoveEvent dayarray = {dayarray}/>
                 </div>
                 <div className="bg-white flex flex-row grow items-start py-10 overflow-x-auto">
                     <Day dayarray = {dayarray}/>

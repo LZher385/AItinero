@@ -78,7 +78,7 @@ function formatData(data: TripDoc) {
 
 export const detail = query({
     args: { id: v.id(TABLE_NAME.TRIPS) },
-    handler: async (ctx, { }) => {
+    handler: async (ctx, { id }) => {
         const trip = await ctx.db.query(TABLE_NAME.TRIPS).unique();
 
         if (!trip || !trip.events || trip.events.length === 0) {

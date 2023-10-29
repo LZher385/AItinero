@@ -13,8 +13,28 @@ import {
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { SetStateAction, useEffect, useState } from "react"
+import { EVENT_STATUS } from "../../convex/schema";
+import { Id } from '../../convex/_generated/dataModel';
 
-export function MoveEvent() {
+interface Props {
+    dayarray: {
+        date: string;
+        events: ({
+            _id: Id<"events">;
+            _creationTime: number;
+            location?: string | undefined;
+            description?: string | undefined;
+            context?: string | undefined;
+            title: string;
+            duration: string;
+            start_time: string;
+            end_time: string;
+            status: EVENT_STATUS;
+        } | null)[];
+    }[] | undefined
+}
+
+export const MoveEvent: React.FC<Props> = ({dayarray}) => {
   const [currentEventDate, setCurrentEventDate] = useState<string>('')
   const changeCurrentEventDate = (currentdate: SetStateAction<string>) => setCurrentEventDate(currentdate)
 

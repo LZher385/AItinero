@@ -1,4 +1,4 @@
-
+'use client';
 
 import { Home } from '@/components/itinerarylayout';
 import { useQuery, useMutation } from 'convex/react'
@@ -10,13 +10,12 @@ function getTripData(slug: string) {
     const id = slug as Id<TABLE_NAME.TRIPS>
     const tripData = useQuery(api.trips.detail, {id});
 
-    console.log(tripData)
-
     return tripData
 }
 
-export default function Page({ params }: { params: { slug: string } }) {
-    const tripData = getTripData(params.slug)!
+export default function Page({ params }: { params: { id: string } }) {
+
+    const tripData = getTripData(params.id)!
     
     return (
         <Home dayarray={tripData.days}/>
