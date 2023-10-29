@@ -13,6 +13,8 @@ import {
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { SetStateAction, useEffect, useState } from "react"
+import { useQuery, useMutation } from "convex/react"
+import { api } from "../../convex/_generated/api";
 
 export function AddEvent() {
   const [eventName, setEventName] = useState<string>('')
@@ -30,9 +32,13 @@ export function AddEvent() {
   const [eventDescription, setEventDescription] = useState<string>('')
   const changeEventDescription = (eventdescription: SetStateAction<string>) => setEventDescription(eventdescription)
 
-  function addEventFunction() {
-    console.log(eventName, (eventDate + "T" + startTime + ":00.000Z"), (eventDate + "T" + endTime + ":00.000Z"), eventDescription)
-  }
+  let realStartTime = eventDate + "T" + startTime + ":00.000Z"
+  let realEndTime = eventDate + "T" + endTime + ":00.000Z"
+
+  const create = useMutation(api.events.create);
+  const handleClick = () => {
+    create({ event: {start_time: realStartTime, end_time: realEndTime, title: eventName, description: eventDescription}});
+  };
 
   return (
     <Dialog>
@@ -109,7 +115,7 @@ export function AddEvent() {
           </div>
         </div>
         <DialogFooter>
-          <Button type="submit" onClick={addEventFunction}>Submit</Button>
+          <Button type="submit" onClick={handleClick}>Submit</Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>

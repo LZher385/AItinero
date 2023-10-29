@@ -8,7 +8,8 @@ import { EVENT_STATUS, TABLE_NAME } from './schema';
 const createEvent = v.object({
   start_time: v.string(),
   end_time: v.string(),
-  title: v.string()
+  title: v.string(),
+  description: v.optional(v.string())
 });
 
 export type CreateEventArgs = Infer<typeof createEvent>;
@@ -33,7 +34,7 @@ export const create = mutation({
   args: { event: createEvent },
   handler: async (ctx, { event }) => {
     // check that event can be scheduled, return error if not possible
-    const { start_time, end_time, title } = event;
+    const { start_time, end_time, title, description } = event;
     const eventId = await ctx.db.insert(TABLE_NAME.EVENTS, {
       start_time,
       end_time,
@@ -42,7 +43,8 @@ export const create = mutation({
         convertTimestampToMilliseconds(end_time) -
         convertTimestampToMilliseconds(start_time)
       ).toString(),
-      title
+      title,
+      description,
     });
     return eventId;
   }

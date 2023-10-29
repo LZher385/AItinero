@@ -12,7 +12,10 @@ import { useQuery, useMutation } from 'convex/react'
 import {api} from '../../../convex/_generated/api'
 
 export default function Home() {
-  function generateFunction() {}
+    const create = useMutation(api.events.create);
+    const handleClick = () => {
+    };
+    function generateFunction() {}
 
     return (
         <main className="bg-white flex flex-row">
