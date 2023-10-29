@@ -37,7 +37,7 @@ export default function LocationForm() {
                         </Button>
                     </div>
                     <div className="mx-20">
-                        <Button type="button" onClick={() => router.push('/home/duration')}>
+                        <Button type="button" onClick={validateStep}>
                             Next
                         </Button>
                     </div>
