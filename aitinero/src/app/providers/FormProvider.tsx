@@ -30,6 +30,7 @@ export default function FormProvider({ children }: FormProviderProps) {
           location: data.location,
           start_date: data.startDate.toISOString(),
           end_date: data.endDate.toISOString(),
+          preferences: data.preferences,
           name: `${data.location}-${data.startDate}`
         }
       });
