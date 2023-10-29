@@ -32,6 +32,7 @@ export default function FormProvider({ children }: FormProviderProps) {
             });
             console.log(id)
             console.log(data)
+            route.push('/home')
         } else {
             route.replace('/home')
         }

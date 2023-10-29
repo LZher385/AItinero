@@ -3,22 +3,22 @@
 import CardsWrapper from '@/components/CardsWrapper';
 import { useRouter } from 'next/navigation';
 import { Trip } from '@/app/types/trip';
-import { Card, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Cross2Icon } from '@radix-ui/react-icons'
 
 //BE Imports
 import { api } from '../../../convex/_generated/api';
 import { useQuery, useMutation, ReactMutation } from 'convex/react';
-import { id } from 'date-fns/locale';
 import { FunctionReference } from 'convex/server';
 import { Id } from '../../../convex/_generated/dataModel';
 import { TABLE_NAME } from '../../../convex/schema';
+import { DateTime } from 'luxon';
 
 interface MakeTripCardProps {
   trip: Trip ;
   removeTrip: ReactMutation<FunctionReference<"mutation", "public", {
-    id: Id<TABLE_NAME.TRIPS>;
+    id: Id<"trips">;
   }>>;
 }
 
@@ -29,11 +29,17 @@ const MakeTripCard = ({trip, removeTrip}: MakeTripCardProps) => {
     router.replace(`/itinerary/${id}`);
   };
 
+  let formattedStartDate = DateTime.fromISO(trip.start_date).toLocaleString(DateTime.DATE_MED);
+  let formattedEndDate = DateTime.fromISO(trip.end_date).toLocaleString(DateTime.DATE_MED);
+
   return (
     <Card className='h-full w-96'>
       <CardHeader>
-        <CardTitle>{trip.name}</CardTitle>
+        <CardTitle>{trip.location}</CardTitle>
       </CardHeader>
+      <CardContent>
+        {formattedStartDate} - {formattedEndDate}
+      </CardContent>
       <div className='flex flex-row place-content-center justify-between'>
         <div className='m-5'>
           <Button type='button' onClick={() => routeToCard(trip._id)}>Take Me There!</Button>

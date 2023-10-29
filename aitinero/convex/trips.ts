@@ -60,6 +60,6 @@ export const remove = mutation({
 export const list = query({
     args: {},
     handler: (ctx, _) => {
-        return ctx.db.query(TABLE_NAME.TRIPS).order("desc").collect();
+        return ctx.db.query("trips").order("desc").collect();
     }
 })
