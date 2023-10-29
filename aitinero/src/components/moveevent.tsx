@@ -30,7 +30,7 @@ import { Label } from "@/components/ui/label"
 import { SetStateAction, useEffect, useState } from "react"
 import { EVENT_STATUS, TABLE_NAME } from "../../convex/schema";
 import { Id } from '../../convex/_generated/dataModel';
-import { useQuery, useMutation } from "convex/react"
+import { useQuery, useMutation } from "convex/react";
 import { api } from "../../convex/_generated/api";
 
 interface Props {
@@ -117,14 +117,14 @@ export const MoveEvent: React.FC<Props> = ({dayarray}) => {
                 >
                   {value
                     ? eventarray.find((eventarray) => eventarray.value === value)?.label
-                    : "Select framework..."}
+                    : "Select event..."}
                   <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                 </Button>
               </PopoverTrigger>
               <PopoverContent className="w-[200px] p-0">
                 <Command>
-                  <CommandInput placeholder="Search framework..." />
-                  <CommandEmpty>No framework found.</CommandEmpty>
+                  <CommandInput placeholder="Search event..." />
+                  <CommandEmpty>No event found.</CommandEmpty>
                   <CommandGroup>
                     {eventarray.map((eventarray) => (
                       <CommandItem
@@ -174,12 +174,12 @@ export const MoveEvent: React.FC<Props> = ({dayarray}) => {
             />
           </div>
           <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="newstarttime" className="text-right">
-              New Start Time
+            <Label htmlFor="newendtime" className="text-right">
+              New End Time
             </Label>
             <Input
               type="time"
-              id="newstarttime"
+              id="newendtime"
               className="col-span-3"
               onChange={e => changeNewEventEndTime(e.target.value)}
               value={newEventEndTime}

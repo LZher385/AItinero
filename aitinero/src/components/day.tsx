@@ -12,10 +12,11 @@ import {
 import { Label } from "@/components/ui/label"
 
 import { Eventbox } from "./event"
-import { EVENT_STATUS } from '../../convex/schema';
+import { EVENT_STATUS, TABLE_NAME } from '../../convex/schema';
 import { Id } from '../../convex/_generated/dataModel';
 
 interface Props{
+    tripId: Id<TABLE_NAME.TRIPS>,
     dayarray: {
         date: string;
         events: ({
@@ -33,22 +34,23 @@ interface Props{
     }[] | undefined
 }
 
-export const Day: React.FC<Props> = ({dayarray}) => {
+export const Day: React.FC<Props> = ({tripId, dayarray}) => {
     let daylist = [];
     if (dayarray != undefined) {
         for (let i = 0; i < dayarray.length; i++) {
+            var keyvalue = i.toString() 
             daylist.push(
-                <Card className="w-[25vw] mx-[2vw] bg-yellow-50 h-full">
+                <Card key={keyvalue} className="w-[25vw] mx-[2vw] bg-yellow-50 h-full">
                     <CardHeader>
                         <CardTitle>{dayarray[i].date}</CardTitle>
                     </CardHeader>
                     <CardContent className="flex flex-col">
-                        <Eventbox eventarray = {dayarray[i].events}/>
+                        <Eventbox tripId = {tripId} eventarray = {dayarray[i].events}/>
                     </CardContent>
-                    <CardFooter className="flex flex-wrap justify-between">
+                    {/* <CardFooter className="flex flex-wrap justify-between">
                         <Button variant="outline">Clear Events</Button>
                         <Button>Delete Day</Button>
-                    </CardFooter>
+                    </CardFooter> */}
                 </Card>
             )
         }

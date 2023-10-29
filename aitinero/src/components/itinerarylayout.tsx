@@ -10,28 +10,29 @@ import Chatbot from "@/components/Chatbot/Chatbot";
 import { Button } from "@/components/ui/button"
 import { useQuery, useMutation } from 'convex/react'
 import { api } from '../../convex/_generated/api'
-import { EVENT_STATUS } from '../../convex/schema';
+import { EVENT_STATUS, TABLE_NAME } from '../../convex/schema';
 import { Id } from '../../convex/_generated/dataModel';
 
 interface Props{
+    tripId: Id<TABLE_NAME.TRIPS>,
     dayarray: {
-        date: string;
-        events: ({
-            _id: Id<"events">;
-            _creationTime: number;
-            location?: string | undefined;
-            description?: string | undefined;
-            context?: string | undefined;
-            title: string;
-            duration: string;
-            start_time: string;
-            end_time: string;
-            status: EVENT_STATUS;
-        } | null)[];
-    }[] | undefined
-}
+            date: string;
+            events: ({
+                _id: Id<"events">;
+                _creationTime: number;
+                location?: string | undefined;
+                description?: string | undefined;
+                context?: string | undefined;
+                title: string;
+                duration: string;
+                start_time: string;
+                end_time: string;
+                status: EVENT_STATUS;
+            } | null)[];
+        }[] | undefined
+    }
 
-export const Home: React.FC<Props> = ({dayarray}) => {
+export const Home: React.FC<Props> = ({tripId, dayarray}) => {
 
     function generateFunction() {
         
@@ -42,11 +43,11 @@ export const Home: React.FC<Props> = ({dayarray}) => {
             <div className="w-[75vw] flex flex-col">
                 <div className="h-20 flex flex-row items-end pl-[2vw]">
                     <Button variant="outline" onClick={generateFunction}>Generate!</Button>
-                    <AddEvent />
+                    <AddEvent tripId = {tripId}/>
                     <MoveEvent dayarray = {dayarray}/>
                 </div>
                 <div className="bg-white flex flex-row grow items-start py-10 overflow-x-auto">
-                    <Day dayarray = {dayarray}/>
+                    <Day tripId={tripId} dayarray = {dayarray}/>
                 </div>
             </div>
             <div className="w-[25vw]">

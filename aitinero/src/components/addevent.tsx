@@ -15,8 +15,14 @@ import { Label } from "@/components/ui/label"
 import { SetStateAction, useEffect, useState } from "react"
 import { useQuery, useMutation } from "convex/react"
 import { api } from "../../convex/_generated/api";
+import { EVENT_STATUS, TABLE_NAME } from '../../convex/schema';
+import { Id } from '../../convex/_generated/dataModel';
 
-export function AddEvent() {
+interface Props {
+  tripId: Id<TABLE_NAME.TRIPS>
+}
+
+export const AddEvent: React.FC<Props> = ({tripId}) => {
   const [eventName, setEventName] = useState<string>('')
   const changeEventName = (name: SetStateAction<string>) => setEventName(name)
 
@@ -33,10 +39,22 @@ export function AddEvent() {
   const changeEventDescription = (eventdescription: SetStateAction<string>) => setEventDescription(eventdescription)
 
   const create = useMutation(api.events.create);
-  const handleClick = () => {
+  const tripDetails = useQuery(api.trips.read, {id: tripId})
+  const update = useMutation(api.trips.update);
+
+  const handleClick = async () => {
     let realStartTime = eventDate + "T" + startTime + ":00.000Z"
     let realEndTime = eventDate + "T" + endTime + ":00.000Z"
-    create({ event: {start_time: realStartTime, end_time: realEndTime, title: eventName, description: eventDescription}});
+    const eventId = await create({ event: {start_time: realStartTime, end_time: realEndTime, title: eventName, description: eventDescription}}).then(data => data);
+    
+    if (tripDetails!.hasOwnProperty('events') && tripDetails!.events != undefined) {
+      var tripEvents = tripDetails!.events
+      tripEvents.push(eventId)
+    } else {
+      tripEvents = [eventId]
+    }
+
+    update({body: { id: tripId, events: tripEvents}})
   };
 
   return (
@@ -99,6 +117,7 @@ export function AddEvent() {
               onChange={e => changeEndTime(e.target.value)}
               value={endTime}
             />
+          </div>
           <div className="grid grid-cols-4 items-center gap-4">
             <Label htmlFor="description" className="text-right">
               Description
@@ -110,7 +129,6 @@ export function AddEvent() {
               onChange={e => changeEventDescription(e.target.value)}
               value={eventDescription}
             />
-          </div>
           </div>
         </div>
         <DialogFooter>
