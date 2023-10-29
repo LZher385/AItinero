@@ -1,93 +1,104 @@
 'use client';
 
-import * as React from "react"
-import { Button } from "@/components/ui/button"
-import { cn } from "@/lib/utils"
+import * as React from 'react';
+import { Button } from '@/components/ui/button';
+import { cn } from '@/lib/utils';
 import {
   Dialog,
+  DialogClose,
   DialogContent,
   DialogDescription,
   DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog"
+  DialogTrigger
+} from '@/components/ui/dialog';
 import {
   Command,
   CommandEmpty,
   CommandGroup,
   CommandInput,
-  CommandItem,
-} from "@/components/ui/command"
+  CommandItem
+} from '@/components/ui/command';
 import {
   Popover,
   PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover"
-import { Check, ChevronsUpDown } from "lucide-react"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { SetStateAction, useEffect, useState } from "react"
-import { EVENT_STATUS, TABLE_NAME } from "../../convex/schema";
+  PopoverTrigger
+} from '@/components/ui/popover';
+import { Check, ChevronsUpDown } from 'lucide-react';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { SetStateAction, useEffect, useState } from 'react';
+import { EVENT_STATUS, TABLE_NAME } from '../../convex/schema';
 import { Id } from '../../convex/_generated/dataModel';
-import { useQuery, useMutation } from "convex/react";
-import { api } from "../../convex/_generated/api";
+import { useQuery, useMutation } from 'convex/react';
+import { api } from '../../convex/_generated/api';
 
 interface Props {
-    dayarray: {
+  dayarray:
+    | {
         date: string;
         events: ({
-            _id: Id<"events">;
-            _creationTime: number;
-            location?: string | undefined;
-            description?: string | undefined;
-            context?: string | undefined;
-            title: string;
-            duration: string;
-            start_time: string;
-            end_time: string;
-            status: EVENT_STATUS;
+          _id: Id<'events'>;
+          _creationTime: number;
+          location?: string | undefined;
+          description?: string | undefined;
+          context?: string | undefined;
+          title: string;
+          duration: string;
+          start_time: string;
+          end_time: string;
+          status: EVENT_STATUS;
         } | null)[];
-    }[] | undefined
+      }[]
+    | undefined;
 }
 
-export const MoveEvent: React.FC<Props> = ({dayarray}) => {
+export const MoveEvent: React.FC<Props> = ({ dayarray }) => {
+  const [open, setOpen] = React.useState(false);
+  const [value, setValue] = React.useState('');
 
-  const [open, setOpen] = React.useState(false)
-  const [value, setValue] = React.useState("")
+  const [newEventDate, setNewEventDate] = useState<string>('');
+  const changeNewEventDate = (newdate: SetStateAction<string>) =>
+    setNewEventDate(newdate);
 
-  const [newEventDate, setNewEventDate] = useState<string>('')
-  const changeNewEventDate = (newdate: SetStateAction<string>) => setNewEventDate(newdate)
+  const [newEventStartTime, setNewEventStartTime] = useState<string>('');
+  const changeNewEventStartTime = (newstarttime: SetStateAction<string>) =>
+    setNewEventStartTime(newstarttime);
 
-  const [newEventStartTime, setNewEventStartTime] = useState<string>('')
-  const changeNewEventStartTime = (newstarttime: SetStateAction<string>) => setNewEventStartTime(newstarttime)
+  const [newEventEndTime, setNewEventEndTime] = useState<string>('');
+  const changeNewEventEndTime = (newendtime: SetStateAction<string>) =>
+    setNewEventEndTime(newendtime);
 
-  const [newEventEndTime, setNewEventEndTime] = useState<string>('')
-  const changeNewEventEndTime = (newendtime: SetStateAction<string>) => setNewEventEndTime(newendtime)
+  var eventarray = [];
 
-  var eventarray = []
-
-  if (dayarray == undefined){
-    dayarray = []
-  } 
+  if (dayarray == undefined) {
+    dayarray = [];
+  }
 
   for (let i = 0; i < dayarray.length; i++) {
-    const eventlist = dayarray[i].events 
+    const eventlist = dayarray[i].events;
     if (eventlist != null) {
       for (let j = 0; j < eventlist.length; j++) {
         eventarray.push({
           value: eventlist[j]!._id,
           label: eventlist[j]!.title
-        })
+        });
       }
     }
   }
 
   const update = useMutation(api.events.update);
   const handleClick = () => {
-    let newStartTime = newEventDate + "T" + newEventStartTime + ":00.000Z"
-    let newEndTime = newEventDate + "T" + newEventEndTime + ":00.000Z"
-    update({ event: {id: value as Id<TABLE_NAME.EVENTS>, start_time: newStartTime, end_time: newEndTime}});
+    let newStartTime = newEventDate + 'T' + newEventStartTime + ':00.000Z';
+    let newEndTime = newEventDate + 'T' + newEventEndTime + ':00.000Z';
+    update({
+      event: {
+        id: value as Id<TABLE_NAME.EVENTS>,
+        start_time: newStartTime,
+        end_time: newEndTime
+      }
+    });
   };
 
   return (
@@ -116,8 +127,10 @@ export const MoveEvent: React.FC<Props> = ({dayarray}) => {
                   className="w-[200px] justify-between"
                 >
                   {value
-                    ? eventarray.find((eventarray) => eventarray.value === value)?.label
-                    : "Select event..."}
+                    ? eventarray.find(
+                        (eventarray) => eventarray.value === value
+                      )?.label
+                    : 'Select event...'}
                   <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                 </Button>
               </PopoverTrigger>
@@ -131,14 +144,16 @@ export const MoveEvent: React.FC<Props> = ({dayarray}) => {
                         key={eventarray.value}
                         value={eventarray.value}
                         onSelect={(currentValue) => {
-                          setValue(currentValue === value ? "" : currentValue)
-                          setOpen(false)
+                          setValue(currentValue === value ? '' : currentValue);
+                          setOpen(false);
                         }}
                       >
                         <Check
                           className={cn(
-                            "mr-2 h-4 w-4",
-                            value === eventarray.value ? "opacity-100" : "opacity-0"
+                            'mr-2 h-4 w-4',
+                            value === eventarray.value
+                              ? 'opacity-100'
+                              : 'opacity-0'
                           )}
                         />
                         {eventarray.label}
@@ -157,7 +172,7 @@ export const MoveEvent: React.FC<Props> = ({dayarray}) => {
               type="date"
               id="neweventdate"
               className="col-span-3"
-              onChange={e => changeNewEventDate(e.target.value)}
+              onChange={(e) => changeNewEventDate(e.target.value)}
               value={newEventDate}
             />
           </div>
@@ -169,7 +184,7 @@ export const MoveEvent: React.FC<Props> = ({dayarray}) => {
               type="time"
               id="newstarttime"
               className="col-span-3"
-              onChange={e => changeNewEventStartTime(e.target.value)}
+              onChange={(e) => changeNewEventStartTime(e.target.value)}
               value={newEventStartTime}
             />
           </div>
@@ -181,15 +196,19 @@ export const MoveEvent: React.FC<Props> = ({dayarray}) => {
               type="time"
               id="newendtime"
               className="col-span-3"
-              onChange={e => changeNewEventEndTime(e.target.value)}
+              onChange={(e) => changeNewEventEndTime(e.target.value)}
               value={newEventEndTime}
             />
           </div>
         </div>
         <DialogFooter>
-          <Button type="submit" onClick={handleClick}>Submit</Button>
+          <DialogClose asChild>
+            <Button type="submit" onClick={handleClick}>
+              Submit
+            </Button>
+          </DialogClose>
         </DialogFooter>
       </DialogContent>
     </Dialog>
-  )
-}
+  );
+};

@@ -53,7 +53,9 @@ const MakeTripCard = ({ trip, removeTrip }: MakeTripCardProps) => {
           <Button
             className="bg-red-600 hover:bg-red-800"
             type="button"
-            onClick={() => removeTrip({ id: trip._id })}
+            onClick={() => {
+              removeTrip({ id: trip._id });
+            }}
           >
             {' '}
             <Cross2Icon />{' '}
