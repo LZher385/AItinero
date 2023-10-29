@@ -12,10 +12,7 @@ import { useQuery, useMutation } from 'convex/react'
 import {api} from '../../../convex/_generated/api'
 
 export default function Home() {
-
-    function generateFunction() {
-        
-    }
+  function generateFunction() {}
 
     return (
         <main className="bg-white flex flex-row">

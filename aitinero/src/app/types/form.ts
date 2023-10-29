@@ -1,5 +1,5 @@
 export interface FormValues {
-    location: string;
-    startDate: Date;
-    endDate: Date;
-};
+  location: string;
+  startDate: Date;
+  endDate: Date;
+}
