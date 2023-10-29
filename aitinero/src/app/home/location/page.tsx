@@ -26,10 +26,17 @@ export default function LocationForm() {
                 <div className="text-white my-2">
                     <Input type="text" className="rounded-md p-2 w-96 bg-slate-800" {...register('location')}/>
                 </div>
-                <div className="place-self-end">
-                    <Button type="button" onClick={validateStep}>
-                        Next
-                    </Button>
+                <div className="flex flex-row my-5">
+                    <div mx-10 className="mx-20">
+                        <Button type="button" onClick={() => router.push('/home/')}>
+                            Back
+                        </Button>
+                    </div>
+                    <div className="mx-20">
+                        <Button type="button" onClick={() => router.push('/home/duration')}>
+                            Next
+                        </Button>
+                    </div>
                 </div>
             </div>
         </FormWrapper>
