@@ -17,6 +17,8 @@ import type {
 import type * as events from "../events";
 import type * as openai from "../openai";
 import type * as openai_events from "../openai_events";
+import type * as openai_interface from "../openai_interface";
+import type * as openai_scheduler from "../openai_scheduler";
 import type * as trips from "../trips";
 import type * as utils from "../utils";
 
@@ -32,6 +34,8 @@ declare const fullApi: ApiFromModules<{
   events: typeof events;
   openai: typeof openai;
   openai_events: typeof openai_events;
+  openai_interface: typeof openai_interface;
+  openai_scheduler: typeof openai_scheduler;
   trips: typeof trips;
   utils: typeof utils;
 }>;
