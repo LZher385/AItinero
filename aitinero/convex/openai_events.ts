@@ -99,7 +99,7 @@ export const chat = action({
       console.log(event_infos)
 
       for (const info of event_infos) {
-        await ctx.runMutation(api.events.create, {
+        const eventId = await ctx.runMutation(api.events.create, {
           event: {
             title: info[0],
             description: info[1],
@@ -107,6 +107,12 @@ export const chat = action({
             end_time: trip?.end_date!,
           }
         });
+
+        await ctx.runMutation(api.trips.addEvent, {
+          tripId,
+          eventId
+        });
+
       };
 
     }

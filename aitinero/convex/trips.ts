@@ -125,12 +125,35 @@ export const possible_events = query({
       return [];
     }
 
-    const events = await Promise.all(trip.events.map(ctx.db.get));
+    // const events = await Promise.all(trip.events.map(ctx.db.get));
+    const tripEventIds = trip.events;
+    const allPossibleEvents = await ctx.db.query(TABLE_NAME.EVENTS).filter((q) => q.eq(q.field("status"), EVENT_STATUS.Possible)).collect();
 
-    const possibleEvents = events
-      // Filters out null events
-      .filter(event => event?.status == EVENT_STATUS.Possible)
+    const tripPossibleEvents = allPossibleEvents.filter(event => event._id in tripEventIds);
 
-    return possibleEvents;
+
+    // const possibleEvents = events
+    //   // Filters out null events
+    //   .filter(event => event?.status == EVENT_STATUS.Possible)
+
+    // return possibleEvents;
+
+    return tripPossibleEvents;
   }
 })
+
+export const addEvent = mutation({
+  args: { tripId: v.id(TABLE_NAME.TRIPS), eventId: v.id(TABLE_NAME.EVENTS) },
+  handler: async (ctx, { tripId, eventId }) => {
+    const trip = await ctx.db.get(tripId);
+    const events = (trip?.events ?? [])
+    events.push(eventId);
+
+    await ctx.db.patch(tripId, {
+      events
+    })
+
+
+  }
+})
+

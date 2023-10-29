@@ -43,6 +43,7 @@ export const Home: React.FC<Props> = ({ tripId, dayarray }) => {
 
     const generateFunction = async () => {
         await getSuggestions({
+            tripId,
             messageBody
         });
         console.log('woah!')
