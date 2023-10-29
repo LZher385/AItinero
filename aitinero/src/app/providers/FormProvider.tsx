@@ -30,8 +30,6 @@ export default function FormProvider({ children }: FormProviderProps) {
                     name: `${data.location}-${data.startDate}`
                 }
             });
-            console.log(id)
-            console.log(data)
             route.push('/home')
         } else {
             route.replace('/home')
