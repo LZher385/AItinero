@@ -81,21 +81,31 @@ export const detail = query({
   handler: async (ctx, { id }) => {
     const trip = await ctx.db.get(id);
 
-    if (!trip || !trip.events || trip.events.length === 0) {
+    if (!trip) {
       return {};
     }
 
-    // Assuming getAll fetches events based on event_ids. 
-    // It's beneficial if the underlying method has a way of fetching these in a single DB call.
+    const days = getDates(trip.start_date, trip.end_date);
+    if (!trip.events || trip.events.length === 0) {
+      return {
+        name: trip.name,
+        days: days.map(day => ({
+          date: day.day,
+          events: [],
+        }))
+      }
+    }
+
     const events = await Promise.all(trip.events.map(ctx.db.get));
 
-    // Filters out null events
-    events.filter(event => !!event);
 
-    // If events are always in chronological order in the DB, this sort might not be necessary.
-    events.sort((event1, event2) => getSecondsBetweenTimestamps(event2!.start_time, event1!.start_time));
+    events
+      // Filters out null events
+      .filter(event => !!event)
+      // If events are always in chronological order in the DB, this sort might not be necessary.
+      .sort((event1, event2) => getSecondsBetweenTimestamps(event2!.start_time, event1!.start_time));
 
-    const days = getDates(trip.start_date, trip.end_date);
+
     const tripDetails = days.map(day => ({
       date: day.day,
       events: events.filter(event => event!.start_time > day.start && event!.start_time < day.end)
