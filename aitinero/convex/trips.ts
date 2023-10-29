@@ -1,6 +1,6 @@
 import { Infer, v } from "convex/values";
 import { TABLE_NAME } from "./schema";
-import { getDates, getSecondsBetweenTwoTimestamps } from "./utils";
+import { getDates, getSecondsBetweenTimestamps } from "./utils";
 import { query, mutation } from "./_generated/server";
 
 // Models
@@ -79,7 +79,7 @@ export const detail = query({
         let events = await Promise.all(trip.events.map(ctx.db.get));
 
         // If events are always in chronological order in the DB, this sort might not be necessary.
-        events.sort((event1, event2) => getSecondsBetweenTwoTimestamps(event2!.start_time, event1!.start_time));
+        events.sort((event1, event2) => getSecondsBetweenTimestamps(event2!.start_time, event1!.start_time));
 
         const days = getDates(trip.start_date, trip.end_date);
         const tripDetails = days.map(day => ({

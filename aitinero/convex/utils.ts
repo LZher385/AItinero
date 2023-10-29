@@ -21,7 +21,7 @@ export const getDates = (startTime: string, endTime: string) => {
   return dateArray;
 }
 
-export const getSecondsBetweenTwoTimestamps = (startTime: string, endTime: string) => {
+export const getSecondsBetweenTimestamps = (startTime: string, endTime: string) => {
   const end = DateTime.fromISO(endTime);
   const start = DateTime.fromISO(startTime);
   return end.diff(start, 'seconds').toObject()['seconds']!;
