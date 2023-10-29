@@ -98,17 +98,15 @@ export const detail = query({
 
     const events = await Promise.all(trip.events.map(ctx.db.get));
 
-
-    events
+    const filteredEvents = events
       // Filters out null events
-      .filter(event => !!event)
+      .filter(event => event != null)
       // If events are always in chronological order in the DB, this sort might not be necessary.
       .sort((event1, event2) => getSecondsBetweenTimestamps(event2!.start_time, event1!.start_time));
 
-
     const tripDetails = days.map(day => ({
       date: day.day,
-      events: events.filter(event => event!.start_time > day.start && event!.start_time < day.end)
+      events: filteredEvents.filter(event => event!.start_time > day.start && event!.start_time < day.end)
     }));
 
     return {
