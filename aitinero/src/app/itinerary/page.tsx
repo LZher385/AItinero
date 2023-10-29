@@ -1,4 +1,6 @@
-import '../app/globals.css'
+'use client';
+
+import '@/app/globals.css'
 import { Day } from '@/components/day'
 import object from '@/components/sample.json'
 import { AddEvent } from '@/components/addevent'
