@@ -1,6 +1,6 @@
 import { Infer, v } from 'convex/values';
-import { EVENT_STATUS, TABLE_NAME } from './schema';
-import { getDates, getSecondsBetweenTimestamps } from "./utils";
+import { TABLE_NAME } from './schema';
+import { getDates, getSecondsBetweenTimestamps } from './utils';
 import { query, mutation } from './_generated/server';
 import { TripDoc } from '../src/app/types/trip';
 import { DateTime } from 'luxon';
@@ -9,6 +9,7 @@ const createTripBody = v.object({
   start_date: v.string(),
   end_date: v.string(),
   name: v.string(),
+  preferences: v.string(),
   location: v.string()
 });
 export type CreateTripBody = Infer<typeof createTripBody>;
@@ -19,6 +20,7 @@ const updateTripBody = v.object({
   end_date: v.optional(v.string()),
   name: v.optional(v.string()),
   location: v.optional(v.string()),
+  preferences: v.optional(v.string()),
   events: v.optional(v.array(v.id(TABLE_NAME.EVENTS)))
 });
 export type UpdateTripBody = Infer<typeof updateTripBody>;
@@ -52,7 +54,7 @@ export const update = mutation({
 });
 
 export const remove = mutation({
-  args: { id: v.id("trips") },
+  args: { id: v.id('trips') },
   handler: async (ctx, { id }) => {
     await ctx.db.delete(id);
   }
@@ -62,14 +64,18 @@ export const list = query({
   args: {},
   handler: async (ctx, _) => {
     const data = await ctx.db.query('trips').order('desc').collect();
-    let res = data.map(data => formatData(data));
+    let res = data.map((data) => formatData(data));
     return res;
   }
 });
 
 function formatData(data: TripDoc) {
-  let formattedStartDate = DateTime.fromISO(data.start_date).toLocaleString(DateTime.DATE_MED);
-  let formattedEndDate = DateTime.fromISO(data.end_date).toLocaleString(DateTime.DATE_MED);
+  let formattedStartDate = DateTime.fromISO(data.start_date).toLocaleString(
+    DateTime.DATE_MED
+  );
+  let formattedEndDate = DateTime.fromISO(data.end_date).toLocaleString(
+    DateTime.DATE_MED
+  );
   data.start_date = formattedStartDate;
   data.end_date = formattedEndDate;
 
@@ -89,29 +95,33 @@ export const detail = query({
     if (!trip.events || trip.events.length === 0) {
       return {
         name: trip.name,
-        days: days.map(day => ({
+        days: days.map((day) => ({
           date: day.day,
-          events: [],
+          events: []
         }))
-      }
+      };
     }
 
     const events = await Promise.all(trip.events.map(ctx.db.get));
 
     const filteredEvents = events
       // Filters out null events
-      .filter(event => event != null)
+      .filter((event) => event != null)
       // If events are always in chronological order in the DB, this sort might not be necessary.
-      .sort((event1, event2) => getSecondsBetweenTimestamps(event2!.start_time, event1!.start_time));
+      .sort((event1, event2) =>
+        getSecondsBetweenTimestamps(event2!.start_time, event1!.start_time)
+      );
 
-    const tripDetails = days.map(day => ({
+    const tripDetails = days.map((day) => ({
       date: day.day,
-      events: filteredEvents.filter(event => event!.start_time > day.start && event!.start_time < day.end)
+      events: filteredEvents.filter(
+        (event) => event!.start_time > day.start && event!.start_time < day.end
+      )
     }));
 
     return {
       name: trip.name,
-      days: tripDetails,
+      days: tripDetails
     };
   }
 });
@@ -127,10 +137,14 @@ export const possible_events = query({
 
     // const events = await Promise.all(trip.events.map(ctx.db.get));
     const tripEventIds = trip.events;
-    const allPossibleEvents = await ctx.db.query(TABLE_NAME.EVENTS).filter((q) => q.eq(q.field("status"), EVENT_STATUS.Possible)).collect();
+    const allPossibleEvents = await ctx.db
+      .query(TABLE_NAME.EVENTS)
+      .filter((q) => q.eq(q.field('status'), EVENT_STATUS.Possible))
+      .collect();
 
-    const tripPossibleEvents = allPossibleEvents.filter(event => event._id in tripEventIds);
-
+    const tripPossibleEvents = allPossibleEvents.filter(
+      (event) => event._id in tripEventIds
+    );
 
     // const possibleEvents = events
     //   // Filters out null events
@@ -140,20 +154,17 @@ export const possible_events = query({
 
     return tripPossibleEvents;
   }
-})
+});
 
 export const addEvent = mutation({
   args: { tripId: v.id(TABLE_NAME.TRIPS), eventId: v.id(TABLE_NAME.EVENTS) },
   handler: async (ctx, { tripId, eventId }) => {
     const trip = await ctx.db.get(tripId);
-    const events = (trip?.events ?? [])
+    const events = trip?.events ?? [];
     events.push(eventId);
 
     await ctx.db.patch(tripId, {
       events
-    })
-
-
+    });
   }
-})
-
+});
