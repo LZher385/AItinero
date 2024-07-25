@@ -2,7 +2,6 @@
 // Convex Imports
 import { v } from 'convex/values';
 
-
 // Langchain Imports
 import { PromptTemplate } from 'langchain/prompts';
 import { JsonOutputFunctionsParser } from 'langchain/output_parsers';
@@ -12,13 +11,11 @@ import { z } from 'zod';
 import { zodToJsonSchema } from 'zod-to-json-schema';
 
 import { action } from './_generated/server';
-import { api } from './_generated/api';
 import { createModel } from './utils';
-import { TABLE_NAME } from './schema';
 
 export const chat = action({
-  args: { tripId: v.id(TABLE_NAME.TRIPS), messageBody: v.string() },
-  handler: async (ctx, { tripId, messageBody }) => {
+  args: { messageBody: v.string() },
+  handler: async (_, { messageBody }) => {
     const suggestionsModel = createModel();
 
     // Input Template
@@ -79,45 +76,10 @@ export const chat = action({
       .pipe(suggestionsCallingModel)
       .pipe(new JsonOutputFunctionsParser());
 
-    const trip = await ctx.runQuery(api.trips.read, { id: tripId });
-
     let result = await suggestionsChain.invoke({
       input: messageBody
     });
 
-    console.log(result)
-
-    if ("descriptions" in result && "suggestions" in result) {
-      const descriptions: string[] = result["descriptions"] as any;
-      const suggestions: string[] = result["suggestions"] as any;
-
-      console.log(descriptions)
-      console.log(suggestions)
-
-      const event_infos = suggestions.map((suggestion, i) => [suggestion, descriptions[i]])
-
-      console.log(event_infos)
-
-      for (const info of event_infos) {
-        const eventId = await ctx.runMutation(api.events.create, {
-          event: {
-            title: info[0],
-            description: info[1],
-            start_time: trip?.start_date!,
-            end_time: trip?.end_date!,
-          }
-        });
-
-        await ctx.runMutation(api.trips.addEvent, {
-          tripId,
-          eventId
-        });
-
-      };
-
-    }
-
-    return {}
-
+    return result;
   }
 });
